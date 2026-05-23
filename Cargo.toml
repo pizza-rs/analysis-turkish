@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["INFINI Labs <hello@infini.ltd>"]
 edition = "2021"
 license = "MIT"
-description = "Turkish language analysis for INFINI Pizza"
+description = "Turkish text analysis plugin for INFINI Pizza"
 repository = "https://pizza.rs"
 keywords = ["pizza", "turkish", "lowercase", "nlp"]
 
