@@ -1,50 +1,78 @@
-# pizza-analysis-turkish
+<div align="center">
 
-Turkish language analysis with apostrophe handling, Turkish-specific lowercasing (dotted/dotless I), stemming, and stop words.
+# 🇹🇷 pizza-analysis-turkish
 
-Part of the [Pizza](https://pizza.rs) search engine.
+**Turkish text analysis plugin for [INFINI Pizza](https://pizza.rs)**
+
+[![Crate](https://img.shields.io/badge/crate-pizza--analysis--turkish-blue)](https://github.com/pizza-rs/analysis-turkish)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+</div>
+
+---
+
+## Overview
+
+Turkish language analysis with apostrophe handling, Turkish-locale lowercasing,
+stemming, and stop words. Correctly handles the Turkish İ/I/ı/i casing rules
+that differ from standard Unicode case mapping.
 
 ## Components
 
-| Name | Type | Description |
-|------|------|-------------|
-| `turkish_apostrophe` | Token Filter | Strips suffixes after apostrophes in Turkish proper nouns |
-| `turkish_lowercase` | Token Filter | Turkish-specific lowercasing (İ→i, I→ı) per Turkish locale rules |
-| `turkish_stem` | Token Filter | Turkish light stemmer |
-| `turkish_stop` | Token Filter | Turkish stop words filter (209 words) |
-| `turkish` | Analyzer | Full pipeline: apostrophe → turkish_lowercase → stop → stem |
+| Type | Name | Description |
+|:-----|:-----|:------------|
+| TokenFilter | `turkish_apostrophe` | Strip text after apostrophe (proper noun suffixes) |
+| TokenFilter | `turkish_lowercase` | Turkish-locale lowercase (I→ı, İ→i) |
+| TokenFilter | `turkish_stem` | Turkish stemmer (suffix stripping) |
+| TokenFilter | `turkish_stop` | Turkish stop words (209 entries) |
+| Analyzer | `turkish` | Full pipeline: turkish_lowercase → apostrophe → stem → stop |
 
-## Usage
+### Turkish Casing
 
-### Built-in Analyzer
+Standard `toLowercase` maps `I` → `i`, but Turkish requires `I` → `ı` (dotless i):
 
-```json
-{
-  "analyzer": {
-    "type": "turkish"
-  }
-}
+| Input | Turkish | Standard |
+|:------|:--------|:---------|
+| I | ı | i |
+| İ | i | i̇ |
+
+### Apostrophe Handling
+
+Turkish appends suffixes to proper nouns with an apostrophe. The filter strips
+the suffix: `İstanbul'da` → `İstanbul`
+
+## Example
+
+```rust
+use pizza_engine::analysis::AnalysisFactory;
+
+let mut factory = AnalysisFactory::new();
+pizza_analysis_turkish::register_all(&mut factory);
+
+let analyzer = factory.get_analyzer("turkish").unwrap();
+// "İstanbul'daki" → ["istanbul"]
 ```
 
-### Custom Pipeline
+## Installation
 
-```json
-{
-  "analyzer": {
-    "type": "custom",
-    "tokenizer": "standard",
-    "filter": ["turkish_apostrophe", "turkish_lowercase", "turkish_stem", "turkish_stop"]
-  }
-}
+```toml
+[dependencies]
+pizza-analysis-turkish = "0.1"
+```
+
+Or via `pizza-analysis-all`:
+
+```toml
+[dependencies]
+pizza-analysis-all = { version = "0.1", features = ["turkish"] }
 ```
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT
 
-## Related Crates
+---
 
-- [analysis-core](https://github.com/pizza-rs/analysis-core) — Core analysis components and pipeline
-- [analysis-icu](https://github.com/pizza-rs/analysis-icu) — ICU Unicode normalization and tokenization
-- [analysis-english](https://github.com/pizza-rs/analysis-english) — English analysis
-- [analysis-all](https://github.com/pizza-rs/analysis-all) — Meta-crate registering all analyzers
+<div align="center">
+<sub>Part of the <a href="https://pizza.rs">INFINI Pizza</a> ecosystem</sub>
+</div>
