@@ -36,9 +36,9 @@ fn stem_turkish(word: &str) -> Cow<'_, str> {
     for _ in 0..4 {
         let prev_len = s.len();
 
-        // Plural: -lar, -ler
+        // Plural: -lar, -ler (stem of at least 2 chars, e.g. evler → ev)
         if s.ends_with("lar") || s.ends_with("ler") {
-            if s.chars().count() > 5 {
+            if s.chars().count() >= 5 {
                 s.truncate(s.len() - 3);
                 changed = true;
                 continue;
@@ -54,9 +54,9 @@ fn stem_turkish(word: &str) -> Cow<'_, str> {
             }
         }
 
-        // Case: -dan, -den, -tan, -ten
+        // Case: -dan, -den, -tan, -ten (stem of at least 2 chars, e.g. evden → ev)
         if s.ends_with("dan") || s.ends_with("den") || s.ends_with("tan") || s.ends_with("ten") {
-            if s.chars().count() > 5 {
+            if s.chars().count() >= 5 {
                 s.truncate(s.len() - 3);
                 changed = true;
                 continue;
