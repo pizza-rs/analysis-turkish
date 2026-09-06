@@ -3,7 +3,8 @@
 use alloc::borrow::Cow;
 use alloc::string::String;
 use alloc::vec::Vec;
-use pizza_engine::analysis::{Token, TokenFilter};
+use pizza_engine::analysis::Token;
+use pizza_engine::analysis::TokenFilter;
 
 /// Turkish suffix-stripping stemmer based on the Snowball Cilden algorithm.
 ///
@@ -120,8 +121,14 @@ fn stem_turkish(word: &str) -> Cow<'_, str> {
 
         // Agent: -cı, -ci, -cu, -cü, -çı, -çi, -çu, -çü
         for suffix in &[
-            "c\u{0131}", "ci", "cu", "c\u{00fc}",
-            "\u{00e7}\u{0131}", "\u{00e7}i", "\u{00e7}u", "\u{00e7}\u{00fc}",
+            "c\u{0131}",
+            "ci",
+            "cu",
+            "c\u{00fc}",
+            "\u{00e7}\u{0131}",
+            "\u{00e7}i",
+            "\u{00e7}u",
+            "\u{00e7}\u{00fc}",
         ] {
             if s.ends_with(suffix) && s.chars().count() > 4 {
                 let suf_len = suffix.len();

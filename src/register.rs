@@ -4,19 +4,27 @@ use alloc::boxed::Box;
 use alloc::vec;
 use alloc::vec::Vec;
 
-use pizza_engine::analysis::{
-    Analyzer, AnalysisFactory, Normalizer, StandardTokenizer, TokenFilter,
-    Tokenizer,
-};
+use pizza_engine::analysis::AnalysisFactory;
+use pizza_engine::analysis::Analyzer;
+use pizza_engine::analysis::Normalizer;
+use pizza_engine::analysis::StandardTokenizer;
+use pizza_engine::analysis::TokenFilter;
+use pizza_engine::analysis::Tokenizer;
 
-use crate::{TurkishApostropheFilter, TurkishLowercaseFilter, TurkishStemFilter, TurkishStopFilter};
+use crate::TurkishApostropheFilter;
+use crate::TurkishLowercaseFilter;
+use crate::TurkishStemFilter;
+use crate::TurkishStopFilter;
 
 /// Register Turkish token filters and the `"turkish"` analyzer.
 ///
 /// Note: The Turkish analyzer uses `TurkishLowercaseFilter` instead of the
 /// standard `LowercaseNormalizer` to handle dotted/dotless I correctly.
 pub fn register_all(factory: &mut AnalysisFactory) {
-    factory.register_token_filter("turkish_apostrophe", Box::new(TurkishApostropheFilter::new()));
+    factory.register_token_filter(
+        "turkish_apostrophe",
+        Box::new(TurkishApostropheFilter::new()),
+    );
     factory.register_token_filter("turkish_lowercase", Box::new(TurkishLowercaseFilter::new()));
     factory.register_token_filter("turkish_stem", Box::new(TurkishStemFilter::new()));
     factory.register_token_filter("turkish_stop", Box::new(TurkishStopFilter::new()));

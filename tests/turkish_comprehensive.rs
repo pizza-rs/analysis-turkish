@@ -1,7 +1,9 @@
 //! Comprehensive tests for pizza-analysis-turkish.
 
 use pizza_analysis_turkish::*;
-use pizza_engine::analysis::{AnalysisFactory, Token, TokenFilter};
+use pizza_engine::analysis::AnalysisFactory;
+use pizza_engine::analysis::Token;
+use pizza_engine::analysis::TokenFilter;
 
 fn make_token(term: &str) -> Token<'_> {
     Token::new(term, 0, term.len() as u32, 0)
@@ -189,7 +191,9 @@ fn stop_construction() {
 #[test]
 fn stop_filters_common_words() {
     let f = TurkishStopFilter::new();
-    let stop_words = ["ve", "bir", "bu", "da", "de", "ile", "için", "var", "ama", "olan"];
+    let stop_words = [
+        "ve", "bir", "bu", "da", "de", "ile", "için", "var", "ama", "olan",
+    ];
     for word in &stop_words {
         let mut token = make_token(word);
         let (deleted, _) = f.filter(&mut token);

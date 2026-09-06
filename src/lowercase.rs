@@ -3,7 +3,8 @@
 use alloc::borrow::Cow;
 use alloc::string::String;
 use alloc::vec::Vec;
-use pizza_engine::analysis::{Token, TokenFilter};
+use pizza_engine::analysis::Token;
+use pizza_engine::analysis::TokenFilter;
 
 /// Turkish locale-aware lowercase filter.
 ///
@@ -37,8 +38,8 @@ impl TokenFilter for TurkishLowercaseFilter {
         let mut result = String::with_capacity(text.len());
         for c in text.chars() {
             match c {
-                '\u{0130}' => result.push('i'),         // İ → i
-                'I' => result.push('\u{0131}'),          // I → ı (dotless)
+                '\u{0130}' => result.push('i'), // İ → i
+                'I' => result.push('\u{0131}'), // I → ı (dotless)
                 _ => {
                     for lc in c.to_lowercase() {
                         result.push(lc);
